@@ -57,7 +57,7 @@ export type ClientBuilder = {
   host: string
 }
 
-export class Client {
+export interface Client {
 
   client_id: string;
   client_secret: string;
