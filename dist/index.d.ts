@@ -3,7 +3,7 @@ import {AxiosPromise} from "axios";
 export interface User {
 
   id: string;
-  bo: string;
+  body: string;
   host: string;
   fingerprint: string;
   ip_address: string;
