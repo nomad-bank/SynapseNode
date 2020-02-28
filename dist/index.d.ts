@@ -2,9 +2,19 @@ import {AxiosPromise} from "axios";
 
 export interface User {
 
+  id: string;
+  bo: string;
+  host: string;
+  fingerprint: string;
+  ip_address: string;
+  oauth_k: string;
+  client: string;
+
   addUserKyc(bodyParams): AxiosPromise;
   deleteExistingDocument(bodyParams): AxiosPromise;
   updateUser(bodyParams): AxiosPromise;
+  _grabRefreshToken(): Promise<string>;
+  _oauthUser(bodyParams): Promise<any>;
   createNode(bodyParams, idempotency_key): AxiosPromise;
   verifyAchMfa(access_token, mfa_answer, idempotency_key): AxiosPromise;
   getAllUserNodes(queryParams): AxiosPromise;
@@ -48,6 +58,12 @@ export type ClientBuilder = {
 }
 
 export class Client {
+
+  client_id: string;
+  client_secret: string;
+  fingerprint: string;
+  ip_address: string;
+  host: string;
 
   constructor(builder: ClientBuilder);
 
