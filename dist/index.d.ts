@@ -39,7 +39,17 @@ export interface User {
 
 }
 
-export interface Client {
+export type ClientBuilder = {
+  client_id: string,
+  client_secret: string,
+  fingerprint: string,
+  ip_address: string,
+  host: string
+}
+
+export class Client {
+
+  constructor(builder: ClientBuilder);
 
   createUser(bodyParams, ip_address, options): Promise<User>;
   getAllUsers(queryParams): AxiosPromise;
