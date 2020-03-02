@@ -9,6 +9,7 @@ export interface User {
   ip_address: string;
   oauth_k: string;
   client: string;
+  headers: object;
 
   addUserKyc(bodyParams?): AxiosPromise;
   deleteExistingDocument(bodyParams?): AxiosPromise;
