@@ -16,7 +16,8 @@ const {
   getCryptoQuotes,
   getCryptoMarketData,
   getWebhookLogs,
-  getTradeMarketData
+  getTradeMarketData,
+  verifyAddress
 } = require('../constants/apiReqNames');
 
 const { addQueryParams, replacePathParams } = require('../helpers/buildUrls');
@@ -63,7 +64,7 @@ module.exports[getUser] = ({ user_id, full_dehydrate, headers, clientInfo }) => 
   return axios.get(url, { headers });
 };
 
-module.exports[getPlatformTransactions] = ({ page, per_page, clientInfo }) => {
+module.exports[getPlatformTransactions] = ({ page, per_page, filter, clientInfo }) => {
   const { host, headers } = clientInfo;
 
   return axios.get(
@@ -71,19 +72,21 @@ module.exports[getPlatformTransactions] = ({ page, per_page, clientInfo }) => {
       // STATIC ENDPOINT
       originalUrl: `${host}/trans`,
       page,
-      per_page
+      per_page,
+      filter
     }),
     { headers }
   );
 };
 
-module.exports[getPlatformNodes] = ({ page, per_page, clientInfo }) => {
+module.exports[getPlatformNodes] = ({ page, per_page, filter, clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = addQueryParams({
     // STATIC ENDPOINT
     originalUrl: `${host}/nodes`,
     page,
-    per_page
+    per_page,
+    filter
   });
 
   return axios.get(url, { headers });
@@ -152,6 +155,14 @@ module.exports[locateAtms] = ({ page, per_page, zip, radius, lat, lon, clientInf
   });
 
   return axios.get(url, { headers });
+};
+
+module.exports[verifyAddress] = ({ address_city, address_country_code, address_postal_code, address_street, address_subdivision, clientInfo }) => {
+  const { host, headers } = clientInfo;
+  const reqBody = { address_city, address_country_code, address_postal_code, address_street, address_subdivision };
+  const baseUrl = `${host}/address-verification`;
+
+  return axios.post(baseUrl, reqBody, { headers });
 };
 
 module.exports[getCryptoQuotes] = ({ clientInfo }) => {

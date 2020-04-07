@@ -187,11 +187,12 @@ class User {
 
   // GET ALL USER TRANSACTIONS
   getUserTransactions(queryParams = {}) {
-    const { page, per_page } = queryParams;
+    const { page, per_page, filter } = queryParams;
 
     return apiRequests.user[getUserTransactions]({
       page,
       per_page,
+      filter,
       userInfo: this
     });
   }
@@ -333,12 +334,13 @@ class User {
 
   // GET ALL NODE TRANSACTIONS
   getAllNodeTransactions(node_id, queryParams = {}) {
-    const { page, per_page } = queryParams;
+    const { page, per_page, filter } = queryParams;
 
     return apiRequests.user[getAllNodeTransactions]({
       node_id,
       page,
       per_page,
+      filter,
       userInfo: this
     });
   }
@@ -385,10 +387,12 @@ class User {
   }
 
   // GET SUBNET W/ SUBNET_ID
-  getSubnet(node_id, subnet_id) {
+  getSubnet(node_id, subnet_id, queryParams = {}) {
+    const { full_dehydrate } = queryParams;
     return apiRequests.user[getSubnet]({
       node_id,
       subnet_id,
+      full_dehydrate,
       userInfo: this
     });
   }
