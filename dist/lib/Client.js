@@ -15,7 +15,8 @@ const {
   getCryptoQuotes,
   getCryptoMarketData,
   getWebhookLogs,
-  getTradeMarketData
+  getTradeMarketData,
+  verifyAddress
 } = require('../constants/apiReqNames');
 
 const apiRequests = require('../apiReqs/apiRequests');
@@ -104,22 +105,24 @@ class Client {
 
   // GET ALL PLATFORM TRANSACTIONS
   getPlatformTransactions(queryParams = {}) {
-    const { page, per_page } = queryParams;
+    const { page, per_page, filter } = queryParams;
 
     return apiRequests.client[getPlatformTransactions]({
       page,
       per_page,
+      filter,
       clientInfo: this
     });
   }
 
   // GET ALL PLATFORM NODES
   getPlatformNodes(queryParams = {}) {
-    const { page, per_page } = queryParams;
+    const { page, per_page, filter } = queryParams;
 
     return apiRequests.client[getPlatformNodes]({
       page,
       per_page,
+      filter,
       clientInfo: this
     });
   }
@@ -197,6 +200,20 @@ class Client {
       radius,
       lat,
       lon,
+      clientInfo: this
+    });
+  }
+
+  // GET Verify Address
+  verifyAddress(queryParams = {}) {
+    const { address_city, address_country_code, address_postal_code, address_street, address_subdivision } = queryParams;
+
+    return apiRequests.client[verifyAddress]({
+      address_city,
+      address_country_code,
+      address_postal_code,
+      address_street,
+      address_subdivision,
       clientInfo: this
     });
   }
