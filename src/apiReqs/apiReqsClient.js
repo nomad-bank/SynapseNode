@@ -1,4 +1,6 @@
-const axios = require('axios');
+const httpClient = require('./httpClient');
+
+const cUrlDebug = require('../constants/cUrlDebug');
 
 const {
   createUser,
@@ -23,26 +25,26 @@ const {
 const { addQueryParams, replacePathParams } = require('../helpers/buildUrls');
 
 module.exports[createUser] = ({
-  bodyParams,
-  headers,
-  clientInfo
-}) => {
+                                bodyParams,
+                                headers,
+                                clientInfo
+                              }) => {
   const { host } = clientInfo;
 
   // WILL NEED TO IMPLEMENT STATIC ENDPOINTS
-  return axios.post(`${host}/users`, bodyParams, { headers });
+  return httpClient.post(`${host}/users`, bodyParams, { headers: headers, curlirize: cUrlDebug[createUser] });
 };
 
 module.exports[getAllUsers] = ({
-  query,
-  page,
-  per_page,
-  show_refresh_tokens,
-  clientInfo
-}) => {
+                                 query,
+                                 page,
+                                 per_page,
+                                 show_refresh_tokens,
+                                 clientInfo
+                               }) => {
   const { host, headers } = clientInfo;
 
-  return axios.get(
+  return httpClient.get(
     addQueryParams({
       // STATIC ENDPOINT
       originalUrl: `${host}/users`,
@@ -51,7 +53,7 @@ module.exports[getAllUsers] = ({
       per_page,
       show_refresh_tokens
     }),
-    { headers }
+    { headers: headers, curlirize: cUrlDebug[getAllUsers] }
   );
 };
 
@@ -61,13 +63,13 @@ module.exports[getUser] = ({ user_id, full_dehydrate, headers, clientInfo }) => 
   const url = `${host}/users/${user_id}?full_dehydrate=${full_dehydrate ? 'yes' : 'no'}`;
 
   // REFACTOR TO USE REPLACE_PATH_PARAMS
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getUser] });
 };
 
 module.exports[getPlatformTransactions] = ({ page, per_page, filter, clientInfo }) => {
   const { host, headers } = clientInfo;
 
-  return axios.get(
+  return httpClient.get(
     addQueryParams({
       // STATIC ENDPOINT
       originalUrl: `${host}/trans`,
@@ -75,7 +77,7 @@ module.exports[getPlatformTransactions] = ({ page, per_page, filter, clientInfo 
       per_page,
       filter
     }),
-    { headers }
+    { headers: headers, curlirize: cUrlDebug[getPlatformTransactions] }
   );
 };
 
@@ -89,21 +91,21 @@ module.exports[getPlatformNodes] = ({ page, per_page, filter, clientInfo }) => {
     filter
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getPlatformNodes] });
 };
 
 module.exports[getInstitutions] = ({ clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = `${host}/institutions`
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getInstitutions] });
 };
 
 module.exports[issuePublicKey] = ({ scope, clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = `${host}/client?issue_public_key=yes&scope=${scope.join()}`;
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[issuePublicKey] });
 };
 
 module.exports[createSubscription] = ({ url, scope, clientInfo }) => {
@@ -111,7 +113,7 @@ module.exports[createSubscription] = ({ url, scope, clientInfo }) => {
   const reqBody = { url, scope };
   const baseUrl = `${host}/subscriptions`;
 
-  return axios.post(baseUrl, reqBody, { headers });
+  return httpClient.post(baseUrl, reqBody, { headers: headers, curlirize: cUrlDebug[createSubscription] });
 };
 
 module.exports[getAllSubscriptions] = ({ page, per_page, clientInfo }) => {
@@ -123,14 +125,14 @@ module.exports[getAllSubscriptions] = ({ page, per_page, clientInfo }) => {
     per_page
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getAllSubscriptions] });
 };
 
 module.exports[getSubscription] = ({ subscription_id, clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = `${host}/subscriptions/${subscription_id}`;
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getSubscription] });
 };
 
 module.exports[updateSubscription] = ({ subscription_id, bodyParams, clientInfo}) => {
@@ -139,7 +141,7 @@ module.exports[updateSubscription] = ({ subscription_id, bodyParams, clientInfo}
   // CHECK IF VALID BODY PARAMS???
   const reqBody = bodyParams;
 
-  return axios.patch(url, reqBody, { headers });
+  return httpClient.patch(url, reqBody, { headers: headers, curlirize: cUrlDebug[updateSubscription] });
 };
 
 module.exports[locateAtms] = ({ page, per_page, zip, radius, lat, lon, clientInfo }) => {
@@ -154,7 +156,7 @@ module.exports[locateAtms] = ({ page, per_page, zip, radius, lat, lon, clientInf
     lon
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[locateAtms] });
 };
 
 module.exports[verifyAddress] = ({ address_city, address_country_code, address_postal_code, address_street, address_subdivision, clientInfo }) => {
@@ -162,14 +164,14 @@ module.exports[verifyAddress] = ({ address_city, address_country_code, address_p
   const reqBody = { address_city, address_country_code, address_postal_code, address_street, address_subdivision };
   const baseUrl = `${host}/address-verification`;
 
-  return axios.post(baseUrl, reqBody, { headers });
+  return httpClient.post(baseUrl, reqBody, { headers: headers, curlirize: cUrlDebug[verifyAddress] });
 };
 
 module.exports[getCryptoQuotes] = ({ clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = `${host}/nodes/crypto-quotes`;
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getCryptoQuotes] });
 };
 
 module.exports[getCryptoMarketData] = ({ limit, currency, clientInfo }) => {
@@ -180,14 +182,14 @@ module.exports[getCryptoMarketData] = ({ limit, currency, clientInfo }) => {
     currency
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getCryptoMarketData] });
 };
 
 module.exports[getWebhookLogs] = ({ clientInfo }) => {
   const { host, headers } = clientInfo;
   const url = `${host}/subscriptions/logs`;
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getWebhookLogs] });
 };
 
 module.exports[getTradeMarketData] = ({ ticker, clientInfo }) => {
@@ -197,5 +199,5 @@ module.exports[getTradeMarketData] = ({ ticker, clientInfo }) => {
     ticker
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getTradeMarketData] });
 };

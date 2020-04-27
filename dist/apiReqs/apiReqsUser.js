@@ -1,4 +1,6 @@
-const axios = require('axios');
+const httpClient = require('./httpClient');
+
+const cUrlDebug = require('../constants/cUrlDebug');
 
 const {
   addUserKyc,
@@ -43,40 +45,40 @@ const { addQueryParams, replacePathParams } = require('../helpers/buildUrls');
 module.exports[addUserKyc] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.patch(`${host}/users/${id}`, bodyParams, { headers });
+  return httpClient.patch(`${host}/users/${id}`, bodyParams, { headers: headers, curlirize: cUrlDebug[addUserKyc] });
 };
 
 module.exports[deleteExistingDocument] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.patch(`${host}/users/${id}`, bodyParams, { headers });
+  return httpClient.patch(`${host}/users/${id}`, bodyParams, { headers: headers, curlirize: cUrlDebug[deleteExistingDocument] });
 };
 
 module.exports[updateUser] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.patch(`${host}/users/${id}`, bodyParams, { headers });
+  return httpClient.patch(`${host}/users/${id}`, bodyParams, { headers: headers, curlirize: cUrlDebug[updateUser] });
 };
 
 module.exports[_oauthUser] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/oauth/${id}`, bodyParams, { headers });
+  return httpClient.post(`${host}/oauth/${id}`, bodyParams, { headers: headers, curlirize: cUrlDebug[_oauthUser] });
 };
 
 module.exports[createNode] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/users/${id}/nodes`, bodyParams, { headers });
+  return httpClient.post(`${host}/users/${id}/nodes`, bodyParams, { headers: headers, curlirize: cUrlDebug[createNode] });
 };
 
 module.exports[verifyAchMfa] = ({ access_token, mfa_answer, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/users/${id}/nodes`, {
+  return httpClient.post(`${host}/users/${id}/nodes`, {
     access_token,
     mfa_answer
-  }, { headers });
+  }, { headers: headers, curlirize: cUrlDebug[verifyAchMfa] });
 };
 
 module.exports[getAllUserNodes] = ({ page, per_page, type, userInfo }) => {
@@ -88,7 +90,7 @@ module.exports[getAllUserNodes] = ({ page, per_page, type, userInfo }) => {
     type
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getAllUserNodes] });
 };
 
 module.exports[getNode] = ({ node_id, full_dehydrate, force_refresh, userInfo }) => {
@@ -99,19 +101,20 @@ module.exports[getNode] = ({ node_id, full_dehydrate, force_refresh, userInfo })
     force_refresh
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getNode] });
 };
 
-module.exports[getUserTransactions] = ({ page, per_page, userInfo }) => {
+module.exports[getUserTransactions] = ({ page, per_page, filter, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = addQueryParams({
     // STATIC ENDPOINT
     originalUrl: `${host}/users/${id}/trans`,
     page,
-    per_page
+    per_page,
+    filter
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getUserTransactions] });
 };
 
 module.exports[triggerDummyTransactions] = ({ node_id, amount, foreign_transaction, is_credit, subnet_id, type, userInfo }) => {
@@ -125,14 +128,14 @@ module.exports[triggerDummyTransactions] = ({ node_id, amount, foreign_transacti
     type
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[triggerDummyTransactions] });
 };
 
 module.exports[generateUboForm] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/ubo`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[generateUboForm] });
 };
 
 module.exports[getStatementsByUser] = ({ page, per_page, userInfo }) => {
@@ -143,7 +146,7 @@ module.exports[getStatementsByUser] = ({ page, per_page, userInfo }) => {
     per_page
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getStatementsByUser] });
 };
 
 module.exports[getStatementsByNode] = ({ node_id, page, per_page, userInfo }) => {
@@ -154,102 +157,103 @@ module.exports[getStatementsByNode] = ({ node_id, page, per_page, userInfo }) =>
     per_page
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getStatementsByNode] });
 };
 
 module.exports[shipCardNode] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}?ship=yes`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[shipCardNode] });
 };
 
 module.exports[resetCardNode] = ({ node_id, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}?reset=yes`;
 
-  return axios.patch(url, {}, { headers });
+  return httpClient.patch(url, {}, { headers: headers, curlirize: cUrlDebug[resetCardNode] });
 };
 
 module.exports[verifyMicroDeposits] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[verifyMicroDeposits] });
 };
 
 module.exports[reinitiateMicroDeposits] = ({ node_id, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}?resend_micro=yes`;
 
-  return axios.patch(url, {}, { headers });
+  return httpClient.patch(url, {}, { headers: headers, curlirize: cUrlDebug[reinitiateMicroDeposits] });
 };
 
 module.exports[updateNode] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[updateNode] });
 };
 
 module.exports[deleteNode] = ({ node_id, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}`;
 
-  return axios.delete(url, { headers });
+  return httpClient.delete(url, { headers: headers, curlirize: cUrlDebug[deleteNode] });
 };
 
 module.exports[generateApplePayToken] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/applepay`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[generateApplePayToken] });
 };
 
 module.exports[createTransaction] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/trans`;
 
-  return axios.post(url, bodyParams, { headers });
+  return httpClient.post(url, bodyParams, { headers: headers, curlirize: cUrlDebug[createTransaction] });
 };
 
 module.exports[getTransaction] = ({ node_id, trans_id, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/trans/${trans_id}`;
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getTransaction] });
 };
 
-module.exports[getAllNodeTransactions] = ({ node_id, trans_id, page, per_page, userInfo }) => {
+module.exports[getAllNodeTransactions] = ({ node_id, trans_id, page, per_page, filter, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = addQueryParams({
     originalUrl: `${host}/users/${id}/nodes/${node_id}/trans`,
     page,
-    per_page
+    per_page,
+    filter
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getAllNodeTransactions] });
 };
 
 module.exports[deleteTransaction] = ({ node_id, trans_id, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/trans/${trans_id}`;
 
-  return axios.delete(url, { headers });
+  return httpClient.delete(url, { headers: headers, curlirize: cUrlDebug[deleteTransaction] });
 };
 
 module.exports[commentOnStatus] = ({ node_id, trans_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/trans/${trans_id}`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[commentOnStatus] });
 };
 
 module.exports[disputeCardTransaction] = ({ node_id, trans_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/trans/${trans_id}/dispute`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[disputeCardTransaction] });
 };
 
 module.exports[getAllSubnets] = ({ node_id, page, per_page, userInfo }) => {
@@ -260,59 +264,65 @@ module.exports[getAllSubnets] = ({ node_id, page, per_page, userInfo }) => {
     per_page
   });
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getAllSubnets] });
 };
 
-module.exports[getSubnet] = ({ node_id, subnet_id, userInfo }) => {
+module.exports[getSubnet] = ({ node_id, subnet_id, full_dehydrate, userInfo }) => {
   const { host, headers, id } = userInfo;
-  const url = `${host}/users/${id}/nodes/${node_id}/subnets/${subnet_id}`;
+  let url = `${host}/users/${id}/nodes/${node_id}/subnets/${subnet_id}`;
+  if (full_dehydrate) {
+    url = addQueryParams({
+      originalUrl: url,
+      full_dehydrate: 'yes'
+    });
+  }
 
-  return axios.get(url, { headers });
+  return httpClient.get(url, { headers: headers, curlirize: cUrlDebug[getSubnet] });
 };
 
 module.exports[createSubnet] = ({ node_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/subnets`;
 
-  return axios.post(url, bodyParams, { headers });
+  return httpClient.post(url, bodyParams, { headers: headers, curlirize: cUrlDebug[createSubnet] });
 };
 
 module.exports[updateSubnet] = ({ node_id, subnet_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/subnets/${subnet_id}`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[updateSubnet] });
 };
 
 module.exports[shipCard] = ({ node_id, subnet_id, bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
   const url = `${host}/users/${id}/nodes/${node_id}/subnets/${subnet_id}/ship`;
 
-  return axios.patch(url, bodyParams, { headers });
+  return httpClient.patch(url, bodyParams, { headers: headers, curlirize: cUrlDebug[shipCard] });
 };
 
 module.exports[registerNewFingerprint] = ({ refresh_token, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/oauth/${id}`, {
+  return httpClient.post(`${host}/oauth/${id}`, {
     refresh_token
-  }, { headers });
+  }, { headers: headers, curlirize: cUrlDebug[registerNewFingerprint] });
 };
 
 module.exports[supplyDevice2FA] = ({ device, refresh_token, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/oauth/${id}`, {
+  return httpClient.post(`${host}/oauth/${id}`, {
     refresh_token,
     "phone_number": device
-  }, { headers });
+  }, { headers: headers, curlirize: cUrlDebug[supplyDevice2FA] });
 };
 
 module.exports[verifyFingerprint2FA] = ({ validation_pin, refresh_token, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return axios.post(`${host}/oauth/${id}`, {
+  return httpClient.post(`${host}/oauth/${id}`, {
     refresh_token,
     validation_pin
-  }, { headers });
+  }, { headers: headers, curlirize: cUrlDebug[verifyFingerprint2FA] });
 };
