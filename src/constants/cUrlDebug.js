@@ -78,7 +78,7 @@ module.exports[getTradeMarketData] = false;
 // User
 module.exports[addUserKyc] = false;
 module.exports[deleteExistingDocument] = false;
-module.exports[updateUser] = true;
+module.exports[updateUser] = false;
 module.exports[_oauthUser] = false;
 module.exports[createNode] = false;
 module.exports[verifyAchMfa] = false;
