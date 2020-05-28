@@ -57,7 +57,12 @@ module.exports[deleteExistingDocument] = ({ bodyParams, userInfo }) => {
 module.exports[updateUser] = ({ bodyParams, userInfo }) => {
   const { host, headers, id } = userInfo;
 
-  return httpClient.patch(`${host}/users/${id}`, bodyParams, { headers: headers, curlirize: cUrlDebug[updateUser] });
+  return httpClient.patch(`${host}/users/${id}`, bodyParams, {
+    headers: headers,
+    curlirize: cUrlDebug[updateUser],
+    maxContentLength: 1024 * 1024 * 50, // 50MB
+    maxBodyLength: 1024 * 1024 * 50 // 50MB
+  });
 };
 
 module.exports[_oauthUser] = ({ bodyParams, userInfo }) => {
