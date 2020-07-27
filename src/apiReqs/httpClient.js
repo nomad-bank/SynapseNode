@@ -13,7 +13,21 @@ curlirize(axiosInstance, (result, err) => {
 
 axiosInstance.interceptors.response.use((response) => {
   return axiosLogger.responseLogger(response, {
-    prefixText: 'SYNAPSE CLIENT'
+    prefixText: 'SYNAPSE CLIENT',
+  });
+});
+
+axiosInstance.interceptors.response.use((response) => {
+  console.log(`LAA ERROR NORMAL JSON -> ${JSON.stringify(response)}`);
+  console.log(`LAA ERROR NORMAL NORMAL -> ${response}`);
+  return axiosLogger.responseLogger(response);
+});
+
+axiosInstance.interceptors.response.use((response) => {
+  console.log(`LAA ERROR PREFIX JSON -> ${JSON.stringify(response)}`);
+  console.log(`LAA ERROR PREFIX NORMAL -> ${response}`);
+  return axiosLogger.responseLogger(response, {
+    prefixText: 'LAA',
   });
 });
 
