@@ -4,6 +4,8 @@ const axiosInstance = require('axios').default.create();
 
 curlirize(axiosInstance, (result, err) => {
   const { command } = result;
+  console.log(`LAA RESPONSE CURLIRIZE JSON ${JSON.stringify(result)}`);
+  console.log(`LAA RESPONSE CURLIRIZE ${result}`);
   if (err) {
     console.error(err);
   } else {
@@ -12,26 +14,16 @@ curlirize(axiosInstance, (result, err) => {
 });
 
 axiosInstance.interceptors.response.use(response => {
+  console.log(`LAA RESPONSE JSON ${JSON.stringify(response)}`);
+  console.log(`LAA RESPONSE ${response}`);
   return axiosLogger.responseLogger(response, {
     prefixText: 'SYNAPSE CLIENT'
   });
 });
 
-axiosInstance.interceptors.response.use(response => {
-  console.log(`LAA ERROR NORMAL JSON -> ${JSON.stringify(response)}`);
-  console.log(`LAA ERROR NORMAL NORMAL -> ${response}`);
-  return axiosLogger.responseLogger(response);
-});
-
-axiosInstance.interceptors.response.use(response => {
-  console.log(`LAA ERROR PREFIX JSON -> ${JSON.stringify(response)}`);
-  console.log(`LAA ERROR PREFIX NORMAL -> ${response}`);
-  return axiosLogger.responseLogger(response, {
-    prefixText: 'LAA'
-  });
-});
-
 axiosInstance.interceptors.response.use(function (response) {
+  console.log(`LAA RESPONSE ERROR JSON ${JSON.stringify(response)}`);
+  console.log(`LAA RESPONSE ERROR ${response}`);
   if (response.data && response.data.error) {
     return Promise.reject(response);
   } else {
